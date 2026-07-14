@@ -39,25 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
         setTheme(saved, false);
 
         if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-        // Add ripple visual and improved click handler if toggle exists
-        if (themeToggle) {
-            themeToggle.style.position = 'relative';
-            themeToggle.addEventListener('click', function (ev) {
-                // create ripple element
-                var r = themeToggle.querySelector('.pc-ripple');
-                if (!r) {
-                    r = document.createElement('span');
-                    r.className = 'pc-ripple';
-                    themeToggle.appendChild(r);
-                }
-                // position in center
-                r.style.left = '50%'; r.style.top = '50%'; r.style.transform = 'translate(-50%,-50%)';
-                themeToggle.classList.add('ripple-active');
-                setTimeout(function () { themeToggle.classList.remove('ripple-active'); }, 520);
-                // call existing toggle
-                toggleTheme();
-            });
-        }
     })();
 
     // Navbar gains a solid background + shadow once the page scrolls

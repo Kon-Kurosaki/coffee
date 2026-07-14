@@ -27,42 +27,6 @@
     --shadow-deep: 0 25px 60px rgba(21, 8, 9, 0.45);
 }
 
-/* Transition helper applied briefly on theme change */
-.theme-transition, .theme-transition * {
-    transition: background-color 360ms ease, color 360ms ease, border-color 360ms ease, box-shadow 360ms ease !important;
-}
-
-/* Nice glowing accent when hovering the theme toggle */
-.pc-theme-toggle::after {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    border-radius: 999px;
-    pointer-events: none;
-    transition: box-shadow 240ms ease, opacity 240ms ease;
-    opacity: 0;
-}
-.pc-theme-toggle:hover::after { opacity: 1; box-shadow: 0 10px 30px rgba(212,160,86,0.12); }
-
-/* Ripple effect element (added/removed by JS) */
-.pc-theme-toggle .pc-ripple {
-    position: absolute;
-    width: 8px; height: 8px;
-    background: rgba(0,0,0,0.06);
-    border-radius: 50%;
-    transform: scale(1);
-    opacity: 0;
-    pointer-events: none;
-}
-.pc-theme-toggle.ripple-active .pc-ripple {
-    animation: pc-ripple 520ms ease-out;
-}
-@keyframes pc-ripple {
-    0% { transform: scale(0.6); opacity: 0.9; }
-    60% { transform: scale(8); opacity: 0.22; }
-    100% { transform: scale(12); opacity: 0; }
-}
-
 * {
     box-sizing: border-box;
 }
@@ -263,9 +227,19 @@ html {
     cursor: pointer;
     transition: transform 180ms ease, box-shadow 180ms ease, background 200ms ease;
 }
-.pc-theme-toggle .material-icons { font-size: 1.05rem; }
-.pc-theme-toggle:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(15,15,15,0.12); }
-.pc-theme-toggle:active { transform: translateY(-1px); }
+
+    .pc-theme-toggle .material-icons {
+        font-size: 1.05rem;
+    }
+
+    .pc-theme-toggle:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(15,15,15,0.12);
+    }
+
+    .pc-theme-toggle:active {
+        transform: translateY(-1px);
+    }
 
 /* When dark theme is active, invert the toggle look */
 [data-theme="dark"] .pc-theme-toggle {
@@ -276,8 +250,13 @@ html {
 }
 
 /* small icon animation when toggling theme */
-.pc-theme-toggle .material-icons { transition: transform 360ms cubic-bezier(.2,.9,.2,1), color 200ms ease; }
-.pc-theme-toggle .pc-theme-anim { transform: rotate(18deg) scale(1.08); }
+.pc-theme-toggle .material-icons {
+    transition: transform 360ms cubic-bezier(.2,.9,.2,1), color 200ms ease;
+}
+
+.pc-theme-toggle .pc-theme-anim {
+    transform: rotate(18deg) scale(1.08);
+}
 
 /* ---------- Section eyebrow + divider ---------- */
 .pc-eyebrow {
@@ -606,69 +585,53 @@ html {
     left: 46%;
 }
 
-.pc-lightbox-img {
-    max-height: 80vh;
-    object-fit: contain;
-}
-
-/* Custom lightbox styles for larger view when clicking gallery images */
-#lightboxModal {
-    display: none; /* hidden by default; shown by JS */
-    position: fixed;
-    inset: 0;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0,0,0,0.8);
-    z-index: 1200;
-    padding: 24px;
-}
-
-/* When Bootstrap modal is used it toggles .show; treat either as open */
-#lightboxModal.open,
-#lightboxModal.show {
-    display: flex;
-    pointer-events: auto;
-}
-
-    #lightboxModal .modal-dialog {
-        max-width: 96vw;
-        margin: 0;
-    }
-
-#lightbox-img.pc-lightbox-img {
-    max-width: 96vw;
-    max-height: 92vh;
-    width: auto;
-    height: auto;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-    border-radius: 12px;
-}
-
-/* Prevent body scroll when lightbox open */
-.pc-lightbox-open {
-    overflow: hidden;
-}
-
-/* Simple image-only overlay for gallery clicks */
+/* =========================================================
+   Lightbox — plain, dependency-free overlay built at runtime
+   by site.js (#pc-lightbox-overlay / .pc-lightbox-box /
+   .pc-lightbox-img). There is no static markup for this in
+   the HTML, and it has nothing to do with Bootstrap's modal
+   component — mixing the two previously caused Bootstrap to
+   leave a full-screen backdrop behind after closing, which
+   blocked every click on the page.
+   ========================================================= */
 #pc-lightbox-overlay {
     position: fixed;
     inset: 0;
     display: none;
     align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 1400;
     padding: 40px;
+    /* start hidden for fade-in; JS toggles display, this handles the fade */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease;
 }
 
-#pc-lightbox-overlay.is-visible { display: flex; }
+    #pc-lightbox-overlay.is-visible {
+        display: flex;
+        opacity: 1;
+        pointer-events: auto;
+    }
 
 .pc-lightbox-box {
-    background: rgba(255,255,255,0.95);
+    background: rgba(255, 255, 255, 0.95);
     padding: 8px;
     border-radius: 10px;
-    box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
     display: inline-block;
+    /* prepare for pop animation */
+    transform: scale(0.96) translateY(6px);
+    opacity: 0;
+    transition: transform 260ms cubic-bezier(.2, .9, .2, 1), opacity 200ms ease;
+    will-change: transform, opacity;
+}
+
+/* When the overlay is visible, animate the box to full size */
+#pc-lightbox-overlay.is-visible .pc-lightbox-box {
+    transform: scale(1) translateY(0);
+    opacity: 1;
 }
 
 .pc-lightbox-box img.pc-lightbox-img {
@@ -680,9 +643,10 @@ html {
     border-radius: 6px;
 }
 
-/* make sure overlay doesn't block interaction when hidden */
-#pc-lightbox-overlay { pointer-events: none; }
-#pc-lightbox-overlay.is-visible { pointer-events: auto; }
+/* Prevent body scroll while the lightbox is open */
+.pc-lightbox-open {
+    overflow: hidden;
+}
 
 .pc-delay-05 {
     transition-delay: 0.05s;
