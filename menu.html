@@ -22,6 +22,10 @@
                 type="button" aria-label="Open menu" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
                 𝔪𝔢𝔫𝔲
             </button>
+            <!-- Theme toggle button -->
+            <button id="theme-toggle" class="pc-theme-toggle ms-3 d-none d-md-inline" aria-label="Toggle theme" aria-pressed="false" title="Toggle theme">
+                <span class="material-icons">light_mode</span>
+            </button>
             <ul class="navbar-nav d-none d-md-flex">
                 <li class="nav-item"><a class="nav-link text-white" href="index.html">Home</a></li>
                 <li class="nav-item"><a class="nav-link text-white" href="about.html">About</a></li>
@@ -46,44 +50,57 @@
     <section class="pc-section">
         <div class="container">
             <div class="row g-4 justify-content-center">
-                <div class="col-12 col-sm-6 col-lg-4 pc-reveal">
-                    <div class="pc-menu-card">
-                        <img src="menu-hot.png" alt="Hot beverages">
+                <!-- Category filter buttons -->
+                <div class="mb-4 text-center w-100">
+                    <div class="btn-group" role="group" aria-label="Menu categories" id="menu-categories">
+                        <button type="button" class="btn btn-outline-secondary active" data-cat="all">All</button>
+                        <button type="button" class="btn btn-outline-secondary" data-cat="hot">Hot</button>
+                        <button type="button" class="btn btn-outline-secondary" data-cat="cold">Cold</button>
+                        <button type="button" class="btn btn-outline-secondary" data-cat="refreshers">Refreshers</button>
+                        <button type="button" class="btn btn-outline-secondary" data-cat="combos">Combos</button>
+                        <button type="button" class="btn btn-outline-secondary" data-cat="dessert">Dessert</button>
+                        <button type="button" class="btn btn-outline-secondary" data-cat="bites">Bites</button>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-4 pc-reveal" data-category="hot">
+                    <div class="pc-menu-card" data-category="hot">
+                        <img src="images/menu-hot.png" alt="Hot beverages">
                         <h3>ℌ𝔬𝔱 𝔅𝔢𝔳𝔢𝔯𝔞𝔤𝔢𝔰</h3>
                         <p>A wide range of steaming hot coffee to make you feel fresh and light.</p>
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-4 pc-reveal pc-delay-05">
-                    <div class="pc-menu-card">
-                        <img src="menu-cold.png" alt="Cold beverages">
+                    <div class="pc-menu-card" data-category="cold">
+                        <img src="images/menu-cold.png" alt="Cold beverages">
                         <h3>ℭ𝔬𝔩𝔡 𝔅𝔢𝔳𝔢𝔯𝔞𝔤𝔢𝔰</h3>
                         <p>Creamy, frothy cold coffee to keep you cool through the day.</p>
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-4 pc-reveal pc-delay-1">
                     <div class="pc-menu-card">
-                        <img src="menu-refreshers.png" alt="Fruit refreshers">
+                        <img src="images/menu-refreshers.png" alt="Fruit refreshers">
                         <h3>ℜ𝔢𝔣𝔯𝔢𝔰𝔥𝔪𝔢𝔫𝔱𝔰</h3>
                         <p>Fruity, icy refreshing drinks to make you feel renewed.</p>
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-4 pc-reveal pc-delay-15">
                     <div class="pc-menu-card">
-                        <img src="menu-combos.png" alt="Special combos">
+                        <img src="images/menu-combos.png" alt="Special combos">
                         <h3>𝔖𝔭𝔢𝔠𝔦𝔞𝔩 ℭ𝔬𝔪𝔟𝔬𝔰</h3>
                         <p>Your favorite eating and drinking combinations, paired just right.</p>
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-4 pc-reveal pc-delay-2">
                     <div class="pc-menu-card">
-                        <img src="menu-dessert.png" alt="Dessert">
+                        <img src="images/menu-dessert.png" alt="Dessert">
                         <h3>𝔇𝔢𝔰𝔰𝔢𝔯𝔱</h3>
                         <p>Sweet treats to satisfy your palate after a savory bite.</p>
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-4 pc-reveal pc-delay-25">
                     <div class="pc-menu-card">
-                        <img src="menu-bites.png" alt="Burger & Fries">
+                        <img src="images/menu-bites.png" alt="Burger & Fries">
                         <h3>𝔅𝔲𝔯𝔤𝔢𝔯 𝔞𝔫𝔡 𝔉𝔯𝔦𝔢𝔰</h3>
                         <p>Quick bites to satisfy a smaller appetite between cups.</p>
                     </div>
@@ -154,7 +171,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-    <script src="site.js"></script>
+    <script src="js/site.js"></script>
 </body>
 
 </html>

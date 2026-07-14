@@ -21,9 +21,46 @@
     --ink-900: #241512;
     --ink-700: #4a332e;
     --font-display: 'Fraunces', 'Georgia', serif;
-    --font-body: 'Outfit', 'Segoe UI', sans-serif;
+    /* UX-first body font: readable, neutral system stack */
+    --font-body: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
     --shadow-soft: 0 20px 45px rgba(21, 8, 9, 0.16);
     --shadow-deep: 0 25px 60px rgba(21, 8, 9, 0.45);
+}
+
+/* Transition helper applied briefly on theme change */
+.theme-transition, .theme-transition * {
+    transition: background-color 360ms ease, color 360ms ease, border-color 360ms ease, box-shadow 360ms ease !important;
+}
+
+/* Nice glowing accent when hovering the theme toggle */
+.pc-theme-toggle::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 999px;
+    pointer-events: none;
+    transition: box-shadow 240ms ease, opacity 240ms ease;
+    opacity: 0;
+}
+.pc-theme-toggle:hover::after { opacity: 1; box-shadow: 0 10px 30px rgba(212,160,86,0.12); }
+
+/* Ripple effect element (added/removed by JS) */
+.pc-theme-toggle .pc-ripple {
+    position: absolute;
+    width: 8px; height: 8px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 50%;
+    transform: scale(1);
+    opacity: 0;
+    pointer-events: none;
+}
+.pc-theme-toggle.ripple-active .pc-ripple {
+    animation: pc-ripple 520ms ease-out;
+}
+@keyframes pc-ripple {
+    0% { transform: scale(0.6); opacity: 0.9; }
+    60% { transform: scale(8); opacity: 0.22; }
+    100% { transform: scale(12); opacity: 0; }
 }
 
 * {
@@ -35,6 +72,9 @@ body {
     color: var(--ink-900);
     background: var(--cream-50);
     -webkit-font-smoothing: antialiased;
+    /* UX improvements: slightly larger base size and more generous line-height */
+    font-size: 16px;
+    line-height: 1.65;
 }
 
 h1, h2, h3, h4, .display-serif {
@@ -207,6 +247,37 @@ html {
             border-color: var(--maroon-600);
             color: var(--maroon-600);
         }
+
+/* Theme toggle button (cool white pill) */
+.pc-theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #ffffff 0%, #f1f0ee 100%);
+    color: #2b2b2b;
+    border: 1px solid rgba(37, 33, 32, 0.08);
+    box-shadow: 0 6px 18px rgba(15,15,15,0.06), inset 0 1px 0 rgba(255,255,255,0.6);
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease, background 200ms ease;
+}
+.pc-theme-toggle .material-icons { font-size: 1.05rem; }
+.pc-theme-toggle:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(15,15,15,0.12); }
+.pc-theme-toggle:active { transform: translateY(-1px); }
+
+/* When dark theme is active, invert the toggle look */
+[data-theme="dark"] .pc-theme-toggle {
+    background: linear-gradient(180deg, #2b2222 0%, #231818 100%);
+    color: #f7e6c9;
+    border-color: rgba(255,255,255,0.06);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+/* small icon animation when toggling theme */
+.pc-theme-toggle .material-icons { transition: transform 360ms cubic-bezier(.2,.9,.2,1), color 200ms ease; }
+.pc-theme-toggle .pc-theme-anim { transform: rotate(18deg) scale(1.08); }
 
 /* ---------- Section eyebrow + divider ---------- */
 .pc-eyebrow {
@@ -552,9 +623,12 @@ html {
     padding: 24px;
 }
 
-    #lightboxModal.open {
-        display: flex;
-    }
+/* When Bootstrap modal is used it toggles .show; treat either as open */
+#lightboxModal.open,
+#lightboxModal.show {
+    display: flex;
+    pointer-events: auto;
+}
 
     #lightboxModal .modal-dialog {
         max-width: 96vw;
@@ -574,6 +648,41 @@ html {
 .pc-lightbox-open {
     overflow: hidden;
 }
+
+/* Simple image-only overlay for gallery clicks */
+#pc-lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.5);
+    z-index: 1400;
+    padding: 40px;
+}
+
+#pc-lightbox-overlay.is-visible { display: flex; }
+
+.pc-lightbox-box {
+    background: rgba(255,255,255,0.95);
+    padding: 8px;
+    border-radius: 10px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+    display: inline-block;
+}
+
+.pc-lightbox-box img.pc-lightbox-img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: min(420px, 70vw);
+    max-height: min(420px, 70vh);
+    border-radius: 6px;
+}
+
+/* make sure overlay doesn't block interaction when hidden */
+#pc-lightbox-overlay { pointer-events: none; }
+#pc-lightbox-overlay.is-visible { pointer-events: auto; }
 
 .pc-delay-05 {
     transition-delay: 0.05s;
