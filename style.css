@@ -61,6 +61,42 @@ a { text-decoration: none; }
 
 html { scroll-behavior: smooth; }
 
+/* ------------------------
+   Theme system (light/dark)
+   - Use documentElement data-theme attribute
+   - Smoothly transitions key colors when toggling
+   ------------------------ */
+html {
+    transition: background-color 260ms ease, color 260ms ease;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+    --espresso-950: #020405;
+    --espresso-950-solid: #030506;
+    --espresso-800: #0f0b0b;
+    --espresso-700: #1b1413;
+    --maroon-600: #2b1212;
+    --maroon-700: #311313;
+    --gold-300: #f0c27a;
+    --gold-400: #d39d4b;
+    --gold-500: #a97430;
+    --cream-50: #0b0b0c;
+    --cream-100: #0f0f10;
+    --ink-900: #f6f3ee;
+    --ink-700: #d6cfc8;
+    --shadow-soft: 0 18px 40px rgba(0,0,0,0.55);
+    --shadow-deep: 0 30px 70px rgba(0,0,0,0.7);
+}
+
+/* Light explicit (keeps original variable set but allows toggling) */
+[data-theme="light"] {
+    /* no-op: root variables are already tuned for light */
+}
+
+/* Theme toggle styles removed (toggle button deleted) */
+
+
 /* ---------- Navbar ---------- */
 .pc-navbar {
     background: var(--maroon-600);
@@ -489,6 +525,39 @@ html { scroll-behavior: smooth; }
     object-fit: contain;
 }
 
+/* Custom lightbox styles for larger view when clicking gallery images */
+#lightboxModal {
+    display: none; /* hidden by default; shown by JS */
+    position: fixed;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.8);
+    z-index: 1200;
+    padding: 24px;
+}
+
+#lightboxModal.open {
+    display: flex;
+}
+
+#lightboxModal .modal-dialog {
+    max-width: 96vw;
+    margin: 0;
+}
+
+#lightbox-img.pc-lightbox-img {
+    max-width: 96vw;
+    max-height: 92vh;
+    width: auto;
+    height: auto;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    border-radius: 12px;
+}
+
+/* Prevent body scroll when lightbox open */
+.pc-lightbox-open { overflow: hidden; }
+
 .pc-delay-05 { transition-delay: 0.05s; }
 .pc-delay-1 { transition-delay: 0.1s; }
 .pc-delay-15 { transition-delay: 0.15s; }
@@ -643,21 +712,9 @@ html { scroll-behavior: smooth; }
 .pc-gallery-item:hover img { transform: scale(1.08); }
 
 .pc-gallery-item::after {
-    content: '\e8b8';
-    font-family: 'Material Icons';
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
-    color: #fff;
-    background: rgba(21, 8, 9, 0.35);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    /* overlay icon removed */
+    display: none;
 }
-
-.pc-gallery-item:hover::after { opacity: 1; }
 
 /* ---------- Testimonials ---------- */
 .pc-testimonial-card {
