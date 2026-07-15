@@ -258,6 +258,32 @@ html {
     transform: rotate(18deg) scale(1.08);
 }
 
+/* Mobile: make the theme toggle float as a circular button so it's easy to reach */
+@media (max-width: 767.98px) {
+    .pc-theme-toggle {
+        position: fixed;
+        bottom: 16px;
+        right: 16px;
+        z-index: 1600;
+        border-radius: 999px;
+        padding: 0.55rem;
+        gap: 0;
+        min-width: 44px;
+        height: 44px;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+        transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    /* make the icon a little larger on small screens */
+    .pc-theme-toggle .material-icons { font-size: 1.15rem; }
+
+    /* keep it visible above other UI */
+    body.pc-lightbox-open .pc-theme-toggle { z-index: 1700; }
+}
+
 /* ---------- Section eyebrow + divider ---------- */
 .pc-eyebrow {
     display: inline-block;
